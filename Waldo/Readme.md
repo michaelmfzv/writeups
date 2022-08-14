@@ -19,7 +19,7 @@ Se realiza una prueba de ping para confirmar que haya conexión con la máquina
 
 > ping 10.10.10.87 -c1
 
-```
+```console
 PING 10.10.10.87 (10.10.10.87) 56(84) bytes of data.
 64 bytes from 10.10.10.87: icmp_seq=1 ttl=63 time=126 ms
 
@@ -34,7 +34,7 @@ Para identificar el sistema operativo usamos la utilidad proporcionada por S4vit
 
 > whichSystem.py 10.10.10.87
 
-```
+```console
 10.10.10.87 (ttl -> 63): Linux
 ```
 
@@ -51,7 +51,7 @@ Se realiza una revisión de puertos con nmap con las siguientes opciones
 
 > sudo nmap -p- --open -sS --min-rate 5000 -vvv -Pn 10.10.10.87 -oG allPorts
 
-```
+```console
 Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times may be slower.
 Starting Nmap 7.92 ( https://nmap.org ) at 2022-08-14 00:58 -04
 Initiating SYN Stealth Scan at 00:58
@@ -90,7 +90,7 @@ extractPorts () {
 ```
 > extracPorts allPorts
 
-```
+```console
    1   │ 
    2   │ [*] Extracting information...
    3   │ 
@@ -105,7 +105,7 @@ Se realiza un nuevo escaneo con una serie de scripts básicos que nmap nos ofrec
 
 > nmap -sCV -pXXX  10.10.10.87 -oN targeted 
 
-```
+```console
 Starting Nmap 7.92 ( https://nmap.org ) at 2022-08-14 01:01 -04
 Nmap scan report for 10.10.10.87
 Host is up (0.13s latency).

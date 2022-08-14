@@ -19,7 +19,7 @@ Se realiza una prueba de ping para confirmar que haya conexión con la máquina
 
 > ping {machineIP} -c1
 
-```
+```console
 
 ```
 
@@ -29,7 +29,7 @@ Para identificar el sistema operativo usamos la utilidad proporcionada por S4vit
 
 > whichSystem.py {machineIP}
 
-```
+```console
 
 ```
 
@@ -46,13 +46,13 @@ Se realiza una revisión de puertos con nmap con las siguientes opciones
 
 > sudo nmap -p- --open -sS --min-rate 5000 -vvv -Pn {machineIP} -oG allPorts
 
-```
+```console
 
 ```
 
 Por comodidad usamos la utilidad proporcionada por S4vitar extractPorts la cual nos ayuda a revisar el archivo creado por nmap 'all Ports' y nos copia los puertos en la clipboard para su posterior uso; se adjunta la utilidad a continuación
 
-```
+```console
 extractPorts () {
         ports="$(cat $1 | grep -oP '\d{1,5}/open' | awk '{print $1}' FS='/' | xargs | tr ' ' ',')"
         ip_address="$(cat $1 | grep -oP '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}' | sort -u | head -n 1)"
@@ -67,7 +67,7 @@ extractPorts () {
 ```
 > extracPorts allPorts
 
-```
+```console
 
 ```
 
@@ -75,7 +75,7 @@ Se realiza un nuevo escaneo con una serie de scripts básicos que nmap nos ofrec
 
 > nmap -sCV -pXXX  {machineIP} -oN targeted 
 
-```
+```console
 
 ```
 
