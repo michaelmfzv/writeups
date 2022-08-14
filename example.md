@@ -4,7 +4,7 @@
 
 ## Descripción de la máquina
 
-![{machineName}_Image](Images/{machineName}.jpg)
+![{machineName}_Image](Images/{machineName}.png)
 
 La resolución de la máquina presenta las siguiente fases:
 

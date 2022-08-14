@@ -4,7 +4,7 @@
 
 ## Descripción de la máquina
 
-![Waldo_Image](Images/Waldo.jpg)
+![Waldo_Image](Images/Waldo.png)
 
 La resolución de la máquina presenta las siguiente fases:
 
