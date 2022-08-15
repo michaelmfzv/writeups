@@ -267,7 +267,7 @@ Requests/sec.: 40.05383
 
 Revisamos la url http://apocalyst.htb/Rightiousness y observamos que tienen la misma imagen pero tiene 175 carácteres por lo que es posible que oculte algo en el interior.
 
-![image157char](Images/image06.png)
+![image157char](Images/image07.png)
 
 Por tanto la descargamos y la movemos al directorio content para analizarla
 

@@ -44,7 +44,7 @@ Se realiza una revisión de puertos con nmap con las siguientes opciones
 * -Pn: Desabilita el descubrimiento del host a traves de ping
 * -oG: exporta lo reportado en un archivo en formato grepeable
 
-> sudo nmap -p- --open -sS --min-rate 5000 -vvv -Pn {machineIP} -oG allPorts
+> sudo nmap -p- --open -sS --min-rate 5000 -vvv -Pn {machineIP} -oG nmap/allPorts
 
 ```console
 
@@ -65,7 +65,7 @@ extractPorts () {
         rm extractPorts.tmp
 
 ```
-> extracPorts allPorts
+> extracPorts nmap/allPorts
 
 ```console
 
@@ -73,7 +73,7 @@ extractPorts () {
 
 Se realiza un nuevo escaneo con una serie de scripts básicos que nmap nos ofrece para ver las técnologias que corren por detrás
 
-> nmap -sCV -pXXX  {machineIP} -oN targeted 
+> nmap -sCV -pXXX  {machineIP} -oN nmap/targeted 
 
 ```console
 
