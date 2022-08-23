@@ -3,7 +3,7 @@
 # Creación de la carpeta
 mkdir $1
 
-mkdir $1/Images
+mkdir {$1/Images,$1/nmap,$1/content,$1/exploits,$1/scripts}
 
 # Creación de la documentación
 cp example.md $1/Readme.md

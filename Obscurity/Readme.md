@@ -563,25 +563,20 @@ root@obscure:/home/robert# cat /root/root.txt
 ```
 ## Estructura del directorio
 
-
-
 ```
 Obscurity
-│   Readme.md   
-│
-└───nmap
-│   │   allPorts
-│   │   target
-│   
-└───content
-│
-└───exploits
-│
-└───scripts
-│
-└───Images
-    │   Obscurity.png
-
+├── content
+│   ├── hashes
+│   └── SuperSecureServer.py
+├── exploits
+├── Images
+│   ├── image01.png
+│   └── Obscurity.png
+├── nmap
+│   ├── allPorts
+│   └── targeted
+├── Readme.md
+└── scripts
 ```
 
 
