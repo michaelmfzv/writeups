@@ -162,7 +162,7 @@ BurpSuiteCommunity/BurpSuiteCommunity &> /dev/null & disown
 
 Pasamos la solciitud por burpsuite
 
-[solicitud](Images/imagen04.pn)
+[solicitud](Images/imagen04.png)
 
 [solicitud-burp](Images/imagen05.png)
 
