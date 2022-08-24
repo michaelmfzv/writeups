@@ -150,7 +150,7 @@ Ingresando en la web y navegando en los botones observamos que en el botón Port
 
 Ingresando vemos que se tiene un formulario el cual pasaremos por Burpsuite para ver que es lo que se está mandando
 
-[bunty-Report](Images/image03.png)
+[bunty-Report](Images/imagen03.png)
 
 Ingresamos a Burpsuite
 
@@ -168,7 +168,7 @@ Pasamos la solciitud por burpsuite
 
 y vemos que la data se transmite en *base64* y se encuentra *urlencodeada*
 
-[data-decodificada](Images/image06.png)
+[data-decodificada](Images/imagen06.png)
 
 Observamos en Portswigger que hay una vulnerabilidad que se puede explotar con XXE para poder leer los archivos del sistema <https://portswigger.net/web-security/xxe>
 
