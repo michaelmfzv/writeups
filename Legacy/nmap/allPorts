@@ -1,0 +1,5 @@
+# Nmap 7.92 scan initiated Wed Aug 24 11:03:42 2022 as: nmap -p- --open -sS --min-rate 5000 -vvv -Pn -oG allPorts 10.10.10.4
+# Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)
+Host: 10.10.10.4 ()	Status: Up
+Host: 10.10.10.4 ()	Ports: 135/open/tcp//msrpc///, 139/open/tcp//netbios-ssn///, 445/open/tcp//microsoft-ds///
+# Nmap done at Wed Aug 24 11:03:57 2022 -- 1 IP address (1 host up) scanned in 14.92 seconds
