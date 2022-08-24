@@ -17,9 +17,11 @@ La resolución de la máquina presenta las siguiente fases:
 
 Se realiza una prueba de ping para confirmar que haya conexión con la máquina
 
-> ping {machineIP} -c1
-
 ```console
+ping {machineIP} -c1
+```
+
+```
 
 ```
 
@@ -27,9 +29,11 @@ Para identificar el sistema operativo usamos la utilidad proporcionada por S4vit
 
 [^1]: la utilidad se puede descargar de <https://github.com/Akronox/WichSystem.py>
 
-> whichSystem.py {machineIP}
-
 ```console
+whichSystem.py {machineIP}
+```
+
+```
 
 ```
 
@@ -44,9 +48,11 @@ Se realiza una revisión de puertos con nmap con las siguientes opciones
 * -Pn: Desabilita el descubrimiento del host a traves de ping
 * -oG: exporta lo reportado en un archivo en formato grepeable
 
-> sudo nmap -p- --open -sS --min-rate 5000 -vvv -Pn {machineIP} -oG nmap/allPorts
-
 ```console
+sudo nmap -p- --open -sS --min-rate 5000 -vvv -Pn {machineIP} -oG nmap/allPorts
+```
+
+```
 
 ```
 
@@ -65,17 +71,24 @@ extractPorts () {
         rm extractPorts.tmp
 
 ```
-> extracPorts nmap/allPorts
+
+Ejecutamos el comando extractPorts
 
 ```console
+extractPorts nmap/allPorts
+```
+
+```
 
 ```
 
 Se realiza un nuevo escaneo con una serie de scripts básicos que nmap nos ofrece para ver las técnologias que corren por detrás
 
-> nmap -sCV -pXXX  {machineIP} -oN nmap/targeted 
-
 ```console
+nmap -sCV -pXXX  {machineIP} -oN nmap/targeted 
+```
+
+```
 
 ```
 
@@ -89,21 +102,8 @@ Se realiza un nuevo escaneo con una serie de scripts básicos que nmap nos ofrec
 
 ## Estructura del directorio
 
-
-
 ```
 {machineName}
-│   Readme.md   
-│
-└───nmap
-│   │   allPorts
-│   │   target
-│   
-└───content
-│
-└───exploits
-│
-└───scripts
 ```
 
 
