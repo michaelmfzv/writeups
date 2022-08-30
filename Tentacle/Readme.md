@@ -4,7 +4,7 @@
 
 ## Descripción de la máquina
 
-![Tentacle_Image](Images/Tentacleolepng)
+![Tentacle_Image](Images/Tentacle.png)
 
 La resolución de la máquina presenta las siguiente fases:
 
